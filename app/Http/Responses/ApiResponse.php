@@ -16,7 +16,7 @@ class ApiResponse
         ], $statusCode);
     }
 
-    public static function error($message, $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY, $errors = null): JsonResponse
+    public static function error($message, $errors = null, $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY): JsonResponse
     {
         return response()->json([
             'success' => false,
