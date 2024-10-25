@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\StatsController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\PostController;
 use Illuminate\Support\Facades\Route;
@@ -26,5 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/deleted', [PostController::class, 'deletedPosts']);
     Route::post('/restore/{post}', [PostController::class, 'restoreDeletedPost']);
+
+    Route::get('/stats', [StatsController::class, 'index']);
 
 });
