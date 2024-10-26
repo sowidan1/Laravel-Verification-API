@@ -26,7 +26,6 @@ class LoginRequest extends FormRequest
                 'required',
                 'digits:11',
                 'numeric',
-                'exists:users,phone,is_verified,1'
             ],
             'password' => 'required|string|min:8|regex:/^(?=.*[!#$@])(?=.*[a-zA-Z])(?=.*[0-9]).+$/',
         ];
@@ -46,9 +45,8 @@ class LoginRequest extends FormRequest
             'password.regex' => 'password must contain at least one special character, one letter and one number',
             'phone.required' => 'phone is required',
             'phone.string' => 'phone must be a string',
-            'phone.exists' => 'phone is not exists in our records',
-            'phone.max' => 'phone max length is 15',
-            'phone.is_verified' => 'phone number not verified yet',
+            'phone.digits' => 'phone must be 11 digits',
+            'phone.numeric' => 'phone must be a number',
         ];
     }
 }
