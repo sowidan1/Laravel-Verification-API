@@ -1,66 +1,157 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Project with Sanctum Authentication and API Resources
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project is a Laravel-based application featuring user authentication with Sanctum, and API resources for tags and posts. The project includes a verification system, scheduled jobs, and an API stats endpoint.
 
-## About Laravel
+## Table of Contents
+- [Project Setup](#project-setup)
+- [Postman Collection for Testing and Documentation](#postman-collection-for-testing-and-documentation)
+- [Features](#features)
+- [Contributing](#contributing)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Project Setup
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Clone the repository**
 
-## Learning Laravel
+   ```bash
+   git clone https://github.com/sowidan1/Laravel-Verification-API.git
+   
+2. **Open Project**
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+   ```bash
+   cd Laravel-Verification-API
+   ```
+   ```bash
+   code .
+   
+3. **Install dependencies**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+   ```bash
+   composer install
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. **Set up environment variables Copy .env.example to .env and configure it:**
 
-## Laravel Sponsors
+   ```bash
+   cp .env.example .env
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+5. **Generate application key**
 
-### Premium Partners
+   ```bash
+   php artisan key:generate
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+6. **Set up SQLite database in .env file**
+
+7. **Run migrations**
+
+   ```bash
+   php artisan migrate
+
+## My OTP Functionality Setup
+
+
+> **Note**: The OTP functionality relies on [Infobip](https://www.infobip.com/) for sending SMS. You will need valid Infobip credentials to fully test this feature. Infobip offers a free trial for testing purposes, but OTPs will only be sent to the registered phone number used during account setup.
+
+# .env file
+
+```bash
+
+INFOBIP_API_KEY=fb64248cac4a1b924e525075215019b6-5d77bb6d-97be-4242-833a-997ab4382096
+INFOBIP_BASE_URL=https://e5eyqr.api.infobip.com
+INFOBIP_FROM_NUMBER=447491163443
+```
+
+This setup will only send messages to the specific phone number registered for testing with Infobip (in this case, 01019465724).
+
+
+## Skipping OTP Activation
+
+To bypass OTP activation during development or testing, you can use the following steps:
+
+1. Add these values to your `.env` file to configure Infobip:
+
+    ```bash
+
+    INFOBIP_API_KEY=fb64248cac4a1b924e525075215019b6-5d77bb6d-97be-4242-833a-997ab4382096
+    INFOBIP_BASE_URL=https://e5eyqr.api.infobip.com
+    INFOBIP_FROM_NUMBER=447491163443
+    ```
+
+2. In `App/Http/Services/AuthService.php`, uncomment out line 67 to disable the verification requirement:
+
+    ```php
+    // $user->update(['is_verified' => User::IS_VERIFIED]);
+    ```
+
+This setup allows you to proceed without OTP verification, which is useful for initial testing and development purposes.
+
+
+## Postman Collection for Testing and Documentation
+
+You can test the API using the following Postman collection:
+
+1. **Import the Collection**:
+   - Open Postman.
+   - Click on **Import** in the top left corner.
+   - Select **Import From Link**.
+   - Paste the following URL:
+     
+     ```
+     https://api.postman.com/collections/27167134-da9f6510-295f-4b03-bfcc-3c680c50f2ed?access_key=PMAT-01JB2WZ3KADBBA05BAK2QTESRC
+     ```
+
+## Features
+
+### Authentication System (Sanctum)
+- **Register (/register)**: 
+  - Registers users with name, phone, and password.
+  - A 6-digit verification code is generated and logged.
+
+- **Login (/login)**: 
+  - Authenticates verified users and returns user data with an access token.
+
+- **Verify OTP**: 
+  - Verifies the OTP sent to the user’s phone.
+  - Only verified accounts can log in.
+
+### Tags API Resource
+- Authenticated users can:
+  - **View** all tags.
+  - **Create** new tags.
+  - **Update** existing tags.
+  - **Delete** tags.
+- Tags must have unique names.
+
+### Posts API Resource
+- Authenticated users can manage their posts:
+  - **View** only their posts.
+  - **Create** new posts.
+  - **View** a single post.
+  - **Update** their posts.
+  - **Soft-delete** posts.
+  - **View** deleted posts.
+  - **Restore** deleted posts.
+- Posts include the following fields:
+  - Title (required, max 255 characters)
+  - Body (required, string)
+  - Cover image (required for storing, optional for updating, image type)
+  - Pinned status (required, boolean)
+  - Associated tags (many-to-many relationship)
+- Soft-deleted posts older than 30 days are permanently deleted by a daily scheduled job.
+
+### Scheduled Jobs
+- **Daily Cleanup**: Force-deletes soft-deleted posts older than 30 days.
+- **External API Call**: Fetches data from [Random User API](https://randomuser.me/api/) every six hours and logs the response.
+
+### Stats Endpoint (/stats)
+- Returns:
+  - Total count of all users.
+  - Total count of all posts.
+  - Count of users with no posts.
+- The results are cached and update automatically on changes to user and post models.
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Contributions are welcome! If you have suggestions for improvements, please feel free to fork the repository and submit a pull request. You can also open an issue if you encounter any bugs or have feature requests.
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Please ensure to follow the code of conduct and the contribution guidelines outlined in the repository.
